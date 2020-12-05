@@ -1,15 +1,16 @@
 package main
 
-import (
-	"fmt"
-	"regexp"
-)
+import "fmt"
 
 func main(){
 
-	string := "hzl"
-	eclTrue, _ := regexp.MatchString(`^amb$|^blu$|^brn$|^gry$|^grn$|^hzl$|^oth$`, string)
-	if eclTrue == false {
-		fmt.Println("false")
+	characterMap := map[int]int{
+		0: 127,
+		7: 10,
+	}
+
+	for minNum, maxNum := range characterMap {
+		fmt.Println(minNum)
+		fmt.Println(maxNum)
 	}
 }
