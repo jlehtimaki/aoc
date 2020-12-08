@@ -4,13 +4,7 @@ import "fmt"
 
 func main(){
 
-	characterMap := map[int]int{
-		0: 127,
-		7: 10,
-	}
+	integ := -3
 
-	for minNum, maxNum := range characterMap {
-		fmt.Println(minNum)
-		fmt.Println(maxNum)
-	}
+	fmt.Println(10 + integ)
 }
