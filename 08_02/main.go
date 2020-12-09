@@ -46,7 +46,7 @@ func getAccumulator(input string) int{
 		} else {
 			continue
 		}
-		for t < 1000 {
+		for t < 100 {
 			t++
 			if lineNumber == len(lines){
 				return accumulator
