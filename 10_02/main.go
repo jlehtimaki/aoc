@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	lines = readLines("tinput.txt")
+	lines = readLines("input.txt")
 	dpMap = map[int]int{}
 )
 
