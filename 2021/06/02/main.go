@@ -4,71 +4,60 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"regexp"
 	"strconv"
+	"strings"
 )
 
 func readLines(path string) []string {
-        file, err := os.Open(path)
-        if err != nil {
-                fmt.Printf("%s", err)
-        }
-        defer file.Close()
-
-        var stringArray []string
-        scanner := bufio.NewScanner(file)
-        for scanner.Scan() {
-                stringArray = append(stringArray, scanner.Text())
-        }
-        return stringArray
-}
-
-func getAllLetters(lines []string) map[string]int {
-	letterMap := map[string]int{}
-	re := regexp.MustCompile(`[A-Z]`)
-	for _, line := range lines {
-		letters := re.FindAllString(line, -1)
-		for _, l := range letters {
-			if _, ok := letterMap[l]; ok {
-				continue
-			}
-			letterMap[l] = 0
-		}
+	file, err := os.Open(path)
+	if err != nil {
+		fmt.Printf("%s", err)
 	}
-	return letterMap
-}
+	defer file.Close()
 
-func remove(slice []string, s int) []string {
-	return append(slice[:s], slice[s+1:]...)
-}
-
-func countLine(input []string, lineNumber int) int{
-	count := 0
-	numbers := input[lineNumber:lineNumber+3]
-	for _, n := range numbers {
-		nn, _ := strconv.Atoi(n)
-		count = count + nn
+	var stringArray []string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		stringArray = append(stringArray, scanner.Text())
 	}
-	return count
+	return stringArray
 }
 
 func solveProblem(input string) int {
+	var numberList []int
+	numbers := map[int]int{}
 	lines := readLines(input)
-	var count int
-	//var prevValue int
-	//prevValue = countLine(lines, 0)
-	//lines = remove(lines, 0)
-	for true {
-		if len(lines) > 3 {
-			n1, _ := strconv.Atoi(lines[0])
-			n2, _ := strconv.Atoi(lines[3])
-			if n2 > n1 {
-				count = count + 1
-			}
-			lines = remove(lines, 0)
-		} else {
-			break
+	numbersString := strings.Split(lines[0],",")
+	for _, numberString := range numbersString {
+		number,_ := strconv.Atoi(numberString)
+		numberList = append(numberList, number)
+	}
+
+	for _, number := range numberList {
+		if _, ok := numbers[number]; !ok {
+			numbers[number] = 0
 		}
+		numbers[number] = numbers[number] + 1
+	}
+
+
+	for x:=0 ; x < 256; x++ {
+		dummy := map[int]int{}
+		for k, v := range numbers{
+			if k == 0 {
+				dummy[6] = dummy[6] + v
+				dummy[8] = dummy[8] + v
+			} else {
+				dummy[k-1] = dummy[k-1] + v
+			}
+		}
+		numbers = dummy
+		fmt.Println(numbers)
+	}
+
+	var count int
+	for _, v := range numbers {
+		count = count + v
 	}
 	return count
 }

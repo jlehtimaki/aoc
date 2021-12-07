@@ -5,38 +5,47 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 )
 
 func readLines(path string) []string {
-        file, err := os.Open(path)
-        if err != nil {
-                fmt.Printf("%s", err)
-        }
-        defer file.Close()
+	file, err := os.Open(path)
+	if err != nil {
+		fmt.Printf("%s", err)
+	}
+	defer file.Close()
 
-        var stringArray []string
-        scanner := bufio.NewScanner(file)
-        for scanner.Scan() {
-                stringArray = append(stringArray, scanner.Text())
-        }
-        return stringArray
+	var stringArray []string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		stringArray = append(stringArray, scanner.Text())
+	}
+	return stringArray
 }
 
 func solveProblem(input string) int {
+	var numbers []int
 	lines := readLines(input)
-	var prevLine int
-	var count int
-	for n, l := range lines {
-		if n == 0 {
-			continue
-		}
-		lineInt,_ := strconv.Atoi(l)
-		if lineInt >= prevLine {
-			count = count + 1
-		}
-		prevLine = lineInt
+	numbersString := strings.Split(lines[0],",")
+	for _, numberString := range numbersString {
+		number,_ := strconv.Atoi(numberString)
+		numbers = append(numbers, number)
 	}
-	return count
+
+	for x:=0 ; x < 80; x++ {
+		for n, number := range numbers {
+			if number == 0 {
+				number = 8
+				numbers = append(numbers, 8)
+				numbers[n] = 6
+				continue
+			}
+			number = number - 1
+			numbers[n] = number
+		}
+	}
+
+	return len(numbers)
 }
 
 func main()  {
