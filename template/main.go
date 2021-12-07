@@ -23,6 +23,7 @@ func readLines(path string) []string {
 
 func solveProblem(input string) int {
 	var count int
+	lines := readLines(input)
 	return count
 }
 
