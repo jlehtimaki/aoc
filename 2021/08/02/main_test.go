@@ -5,7 +5,7 @@ import (
 )
 
 func TestSolveProblem(t *testing.T) {
-	want := 26
+	want := 61229
 	got := solveProblem("tinput.txt")
 	if want != got {
 		t.Errorf("Want: %d - Got: %d", want, got)
