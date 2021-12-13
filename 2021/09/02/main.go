@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -74,16 +75,23 @@ func solveProblem(input string) int {
 	}
 
 	var points []int
-	for k, _ := range lowPoints {
-		points = append(points,findLowPoints(k,intArray))
-		break
+	for k, v := range lowPoints {
+		fmt.Println("----------")
+		fmt.Println(v)
+		fmt.Println("----------")
+		points = append(points,findLowPoints(k,intArray, map[string]int{}))
+		fmt.Println(points)
 	}
+
+	sort.Sort(sort.Reverse(sort.IntSlice(points)))
+	fmt.Println(points)
+	count = points[0] * points[1] * points[2]
 
 	return count
 }
 
-func findLowPoints(coordinates string, intArray [][]int) int {
-	var points int
+func findLowPoints(coordinates string, intArray [][]int, cache map[string]int) int {
+	points := 1
 	coordinatesArray := strings.Split(coordinates, ",")
 
 	y,_ := strconv.Atoi(coordinatesArray[0])
@@ -120,17 +128,17 @@ func findLowPoints(coordinates string, intArray [][]int) int {
 		adjacent[coord] = intArray[y+1][x]
 	}
 
-	fmt.Println(originalNumber)
-	fmt.Println(adjacent)
+
 	for k, v := range adjacent {
-		fmt.Println(v)
-		if (v + 1) == originalNumber {
-			points = points + 1
-			points = points + findLowPoints(k, intArray)
+		if _, ok := cache[k]; ok {
+			continue
+		}
+		if v == originalNumber + 1 {
+			fmt.Printf("%d --> %d\n", originalNumber, v)
+			cache[k] = v
+			points = points + findLowPoints(k, intArray, cache)
 		}
 	}
-	fmt.Println(points)
-	
 
 	return points
 }
