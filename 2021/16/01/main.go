@@ -23,7 +23,53 @@ func readLines(path string) []string {
 	return stringArray
 }
 
-func parseBinary(binary []string) int64 {
+func parsePacket(binary []string, start int) int64 {
+	packetVersion,_ := strconv.ParseInt(strings.Join(binary[start:start+3],""),2,64)
+	var packetLenght int
+	var out int64
+	packetType,_ := strconv.ParseInt(strings.Join(binary[start+3:start+6],""),2,64)
+	packetTypeId := strings.Join(binary[6:7],"")
+
+	fmt.Println(packetVersion)
+	fmt.Println(packetType)
+	fmt.Println(packetTypeId)
+	if packetType == 4 {
+		return solveBinary(binary)
+	} else {
+		if packetTypeId == "0" {
+			var version int64
+			packetLenght = 15
+			subPackets, _ := strconv.ParseInt(strings.Join(binary[7:7+packetLenght],""),2,64)
+			start := 7+packetLenght
+			var end int
+			for out < subPackets {
+				firstBin := strings.Join(binary[start:start+1],"")
+				if firstBin == "1" {
+					end = start + 11
+
+				} else if firstBin == "0" {
+					end = start + 15
+				}
+				out = out + solveBinary(binary[start:end])
+				start = end
+			}
+		} else if packetTypeId == "1" {
+			packetLenght = 11
+			subPackets, _ := strconv.ParseInt(strings.Join(binary[7:7+packetLenght],""),2,64)
+			start := 7+packetLenght
+			for i:=0; i<int(subPackets); i++ {
+				end := start + packetLenght
+				out = out + solveBinary(binary[start:start+packetLenght])
+				start = end
+			}
+		}
+	}
+
+	return out
+}
+
+
+func solveBinary(binary []string) int64 {
 	var out int64
 	var bytes []string
 	//packetVersion,_ := strconv.ParseInt(strings.Join(binary[0:3],""),2,64)
@@ -66,7 +112,7 @@ func solveProblem(input string) int {
 
 	//lines := readLines(input)
 	// 3 first
-	hexaDecimal := "D2FE28"
+	hexaDecimal := "A0016C880162017C3686B18A3D4780"
 	var binary []string
 	for _, c := range hexaDecimal {
 		if _, ok := binaries[string(c)]; ok {
@@ -76,7 +122,9 @@ func solveProblem(input string) int {
 		}
 	}
 
-	fmt.Println(parseBinary(binary))
+	binary = append(binary, "0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0")
+	fmt.Println(binary)
+	fmt.Println(parsePacket(binary,0))
 	return count
 }
 
