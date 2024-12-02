@@ -1,3 +1,3 @@
 module github.com/jlehtimaki/aoc.git
 
-go 1.17
+go 1.23
