@@ -21,12 +21,20 @@ func readLines(path string) []string {
 	return stringArray
 }
 
-func solveProblem(input string) int {
+func s1(input string) int {
 	var count int
 	lines := readLines(input)
 	return count
 }
 
-func main()  {
-	fmt.Println(solveProblem("input.txt"))
+func s2(input string) int {
+	var count int
+	lines := readLines(input)
+	return count
 }
+
+func main() {
+	fmt.Printf("P1: %d \n", s1("input.txt"))
+	fmt.Printf("P2: %d \n", s2("input.txt"))
+}
+
